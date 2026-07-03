@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Register as a Candidate — HR Theories</title>
+<meta name="description" content="Register your profile with HR Theories. We contact you only when a mandate genuinely fits.">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=Archivo+Expanded:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="swiss.css">
+</head>
+<body>
+<nav><div class="wrap nav-in">
+  <a class="logo" href="/">HR<span>/</span>THEORIES</a>
+  <ul class="nav-links">
+    <li><a class="h" href="/#services">Services</a></li>
+    <li><a class="h" href="/jobs">Jobs</a></li>
+    <li><a class="h active" href="/register">Candidates</a></li>
+    <li><a class="cta" href="/brief">Brief Us</a></li>
+  </ul>
+</div></nav>
+
+<section class="blk"><div class="wrap">
+  <span class="tag">Candidates</span>
+  <h2 class="sec" style="margin-top:26px">Register once. <em>Heard when it matters.</em></h2>
+  <p class="sec-sub">Most of our searches are confidential and never advertised. Registering puts your profile in front of those mandates. We contact you only when a role genuinely fits — no mass mailing, ever.</p>
+
+  <form class="std" id="regForm">
+    <div class="f-row">
+      <div><label>Full name <span class="req">*</span></label><input name="full_name" required maxlength="120"></div>
+      <div><label>Email <span class="req">*</span></label><input name="email" type="email" required maxlength="160"></div>
+    </div>
+    <div class="f-row">
+      <div><label>Phone <span class="req">*</span></label><input name="phone" required maxlength="40" placeholder="+966 5X XXX XXXX"></div>
+      <div><label>LinkedIn URL</label><input name="linkedin_url" maxlength="240" placeholder="https://linkedin.com/in/…"></div>
+    </div>
+    <div class="f-row">
+      <div><label>Current title <span class="req">*</span></label><input name="current_title" required maxlength="140"></div>
+      <div><label>Current company</label><input name="current_company" maxlength="140"></div>
+    </div>
+    <div class="f-row">
+      <div><label>Primary sector <span class="req">*</span></label>
+        <select name="sector" required>
+          <option value="">Select…</option>
+          <option>Industrial &amp; Manufacturing</option>
+          <option>Energy &amp; Utilities</option>
+          <option>Government &amp; Semi-Government</option>
+          <option>Corporate Functions</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div><label>Years of experience <span class="req">*</span></label><input name="years_experience" type="number" min="0" max="60" required></div>
+    </div>
+    <label>CV (PDF or Word) <span class="req">*</span></label>
+    <input name="cv" type="file" accept=".pdf,.doc,.docx" required><div class="f-note">Max 10 MB.</div>
+    <label>Anything we should know?</label>
+    <textarea name="notes" maxlength="3000" placeholder="Optional — target roles, mobility, notice period…"></textarea>
+    <div class="consent"><input type="checkbox" required id="c1"><label for="c1" style="margin:0;text-transform:none;letter-spacing:0;font-weight:400">I consent to HR Theories storing my details and CV for recruitment purposes.</label></div>
+    <div style="margin-top:26px"><button class="btn red" type="submit" id="regBtn">Register profile</button></div>
+    <div class="f-msg" id="regMsg"></div>
+  </form>
+</div></section>
+
+<footer class="wrap"><div>© 2026 HR Theories — Riyadh, Saudi Arabia</div><div>hrtheories.com</div></footer>
+
+<script src="config.js"></script>
+<script>
+const H = {apikey:HRT.SUPABASE_ANON_KEY, Authorization:`Bearer ${HRT.SUPABASE_ANON_KEY}`};
+document.getElementById('regForm').addEventListener('submit', async ev=>{
+  ev.preventDefault();
+  const f = ev.target, btn = document.getElementById('regBtn'), msg = document.getElementById('regMsg');
+  msg.className='f-msg';
+  const cv = f.cv.files[0];
+  if(cv && cv.size > 10*1024*1024){ msg.className='f-msg err'; msg.textContent='CV file is larger than 10 MB.'; return; }
+  btn.disabled = true; btn.textContent = 'Registering…';
+  try{
+    const path = `registrations/${crypto.randomUUID()}-${cv.name.replace(/[^\w.\-]/g,'_')}`;
+    const up = await fetch(`${HRT.SUPABASE_URL}/storage/v1/object/cvs/${path}`,{method:'POST',headers:{...H,'Content-Type':cv.type||'application/octet-stream'},body:cv});
+    if(!up.ok) throw new Error('upload');
+    const ins = await fetch(`${HRT.SUPABASE_URL}/rest/v1/candidates`,{method:'POST',headers:{...H,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({
+      full_name:f.full_name.value.trim(), email:f.email.value.trim(), phone:f.phone.value.trim(),
+      linkedin_url:f.linkedin_url.value.trim()||null, current_title:f.current_title.value.trim(),
+      current_company:f.current_company.value.trim()||null, sector:f.sector.value,
+      years_experience:parseInt(f.years_experience.value,10), notes:f.notes.value.trim()||null, cv_path:path
+    })});
+    if(!ins.ok) throw new Error('insert');
+    f.reset(); msg.className='f-msg ok'; msg.textContent='Profile registered. We will contact you when a mandate fits.';
+    btn.textContent='Registered';
+  }catch(e){
+    msg.className='f-msg err'; msg.textContent='Something went wrong — please try again, or email your CV to careers@hrtheories.com.';
+    btn.disabled=false; btn.textContent='Register profile';
+  }
+});
+</script>
+</body>
+</html>

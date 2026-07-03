@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brief Us — HR Theories</title>
+<meta name="description" content="Submit a confidential executive search brief. HR Theories responds within one business day.">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=Archivo+Expanded:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="swiss.css">
+</head>
+<body>
+<nav><div class="wrap nav-in">
+  <a class="logo" href="/">HR<span>/</span>THEORIES</a>
+  <ul class="nav-links">
+    <li><a class="h" href="/#services">Services</a></li>
+    <li><a class="h" href="/jobs">Jobs</a></li>
+    <li><a class="h" href="/register">Candidates</a></li>
+    <li><a class="cta" href="/brief">Brief Us</a></li>
+  </ul>
+</div></nav>
+
+<section class="blk"><div class="wrap">
+  <span class="tag">Clients — Confidential</span>
+  <h2 class="sec" style="margin-top:26px">Brief us on a <em>mandate.</em></h2>
+  <p class="sec-sub">Tell us about the seat you need to fill. We respond within one business day with an honest view of the search — including whether we're the right firm for it. First-time clients receive 50% off recruitment fees on their opening mandate.</p>
+
+  <form class="std" id="briefForm">
+    <div class="f-row">
+      <div><label>Company <span class="req">*</span></label><input name="company_name" required maxlength="160"></div>
+      <div><label>Your name <span class="req">*</span></label><input name="contact_name" required maxlength="120"></div>
+    </div>
+    <div class="f-row">
+      <div><label>Work email <span class="req">*</span></label><input name="email" type="email" required maxlength="160"></div>
+      <div><label>Phone</label><input name="phone" maxlength="40" placeholder="+966 …"></div>
+    </div>
+    <div class="f-row">
+      <div><label>Role to fill <span class="req">*</span></label><input name="role_title" required maxlength="160" placeholder="e.g. Chief Financial Officer"></div>
+      <div><label>Sector <span class="req">*</span></label>
+        <select name="sector" required>
+          <option value="">Select…</option>
+          <option>Industrial &amp; Manufacturing</option>
+          <option>Energy &amp; Utilities</option>
+          <option>Government &amp; Semi-Government</option>
+          <option>Corporate Functions</option>
+          <option>Other</option>
+        </select>
+      </div>
+    </div>
+    <label>The brief <span class="req">*</span></label>
+    <textarea name="brief" required maxlength="5000" placeholder="Context, the role, what success looks like, timeline. Everything stays confidential."></textarea>
+    <div class="consent"><input type="checkbox" id="c2" name="assessment_interest"><label for="c2" style="margin:0;text-transform:none;letter-spacing:0;font-weight:400">I'm interested in the assessment option (doubles the replacement guarantee).</label></div>
+    <div style="margin-top:26px"><button class="btn red" type="submit" id="briefBtn">Submit confidential brief</button></div>
+    <div class="f-msg" id="briefMsg"></div>
+  </form>
+</div></section>
+
+<footer class="wrap"><div>© 2026 HR Theories — Riyadh, Saudi Arabia</div><div>hrtheories.com</div></footer>
+
+<script src="config.js"></script>
+<script>
+const H = {apikey:HRT.SUPABASE_ANON_KEY, Authorization:`Bearer ${HRT.SUPABASE_ANON_KEY}`};
+document.getElementById('briefForm').addEventListener('submit', async ev=>{
+  ev.preventDefault();
+  const f = ev.target, btn = document.getElementById('briefBtn'), msg = document.getElementById('briefMsg');
+  msg.className='f-msg'; btn.disabled = true; btn.textContent = 'Submitting…';
+  try{
+    const r = await fetch(`${HRT.SUPABASE_URL}/rest/v1/client_briefs`,{method:'POST',headers:{...H,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({
+      company_name:f.company_name.value.trim(), contact_name:f.contact_name.value.trim(), email:f.email.value.trim(),
+      phone:f.phone.value.trim()||null, role_title:f.role_title.value.trim(), sector:f.sector.value,
+      brief:f.brief.value.trim(), assessment_interest:f.assessment_interest.checked
+    })});
+    if(!r.ok) throw new Error('insert');
+    f.reset(); msg.className='f-msg ok'; msg.textContent='Brief received in confidence. Expect our response within one business day.';
+    btn.textContent='Submitted';
+  }catch(e){
+    msg.className='f-msg err'; msg.textContent='Something went wrong — please try again, or email us directly at clients@hrtheories.com.';
+    btn.disabled=false; btn.textContent='Submit confidential brief';
+  }
+});
+</script>
+</body>
+</html>

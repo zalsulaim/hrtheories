@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Role — HR Theories</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=Archivo+Expanded:wght@500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="swiss.css">
+</head>
+<body>
+<nav><div class="wrap nav-in">
+  <a class="logo" href="/">HR<span>/</span>THEORIES</a>
+  <ul class="nav-links">
+    <li><a class="h" href="/#services">Services</a></li>
+    <li><a class="h active" href="/jobs">Jobs</a></li>
+    <li><a class="h" href="/register">Candidates</a></li>
+    <li><a class="cta" href="/brief">Brief Us</a></li>
+  </ul>
+</div></nav>
+
+<section class="blk"><div class="wrap" id="job">
+  <div class="skel"></div><div class="skel"></div>
+</div></section>
+
+<section class="blk" id="applyBlock" style="display:none"><div class="wrap">
+  <h2 class="sec">Apply<em>.</em></h2>
+  <form class="std" id="applyForm">
+    <div class="f-row">
+      <div><label>Full name <span class="req">*</span></label><input name="full_name" required maxlength="120"></div>
+      <div><label>Email <span class="req">*</span></label><input name="email" type="email" required maxlength="160"></div>
+    </div>
+    <div class="f-row">
+      <div><label>Phone <span class="req">*</span></label><input name="phone" required maxlength="40" placeholder="+966 5X XXX XXXX"></div>
+      <div><label>CV (PDF or Word) <span class="req">*</span></label><input name="cv" type="file" accept=".pdf,.doc,.docx" required><div class="f-note">Max 10 MB.</div></div>
+    </div>
+    <label>Cover note</label>
+    <textarea name="cover_note" maxlength="3000" placeholder="Optional — why this role fits you."></textarea>
+    <div class="consent"><input type="checkbox" required id="c1"><label for="c1" style="margin:0;text-transform:none;letter-spacing:0;font-weight:400">I consent to HR Theories storing my details and CV for recruitment purposes.</label></div>
+    <div style="margin-top:26px"><button class="btn red" type="submit" id="applyBtn">Submit application</button></div>
+    <div class="f-msg" id="applyMsg"></div>
+  </form>
+</div></section>
+
+<footer class="wrap"><div>© 2026 HR Theories — Riyadh, Saudi Arabia</div><div>hrtheories.com</div></footer>
+
+<script src="config.js"></script>
+<script>
+const H = {apikey:HRT.SUPABASE_ANON_KEY, Authorization:`Bearer ${HRT.SUPABASE_ANON_KEY}`};
+const params = new URLSearchParams(location.search);
+const jobId = params.get('id');
+const esc = s=>{const d=document.createElement('div');d.textContent=s??'';return d.innerHTML;};
+
+(async function(){
+  const el = document.getElementById('job');
+  if(!jobId){ el.innerHTML = '<div class="empty"><b>Role not found.</b><a href="/jobs">Back to open roles</a></div>'; return; }
+  try{
+    const r = await fetch(`${HRT.SUPABASE_URL}/rest/v1/jobs?id=eq.${encodeURIComponent(jobId)}&status=eq.open&select=*`,{headers:H});
+    const rows = await r.json();
+    if(!rows.length) throw 0;
+    const j = rows[0];
+    document.title = `${j.title} — HR Theories`;
+    el.innerHTML = `
+      <a href="/jobs" style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;text-decoration:none">← All roles</a>
+      <h2 class="sec" style="margin-top:22px">${esc(j.title)}</h2>
+      <div class="meta-strip">
+        <div><b>Sector</b>${esc(j.sector||'—')}</div>
+        <div><b>Location</b>${esc(j.location||'—')}</div>
+        <div><b>Type</b>${esc(j.employment_type||'—')}</div>
+        <div><b>Seniority</b>${esc(j.seniority||'—')}</div>
+      </div>
+      <article class="body">${esc(j.description||'')}</article>
+      ${j.requirements?`<h3 style="margin:34px 0 12px;font-family:'Archivo Expanded';text-transform:uppercase;font-size:16px">Requirements</h3><article class="body">${esc(j.requirements)}</article>`:''}`;
+    document.getElementById('applyBlock').style.display='block';
+  }catch(e){
+    el.innerHTML = '<div class="empty"><b>This role is no longer available.</b><a href="/jobs">Back to open roles</a></div>';
+  }
+})();
+
+document.getElementById('applyForm').addEventListener('submit', async ev=>{
+  ev.preventDefault();
+  const f = ev.target, btn = document.getElementById('applyBtn'), msg = document.getElementById('applyMsg');
+  msg.className='f-msg';
+  const cv = f.cv.files[0];
+  if(cv && cv.size > 10*1024*1024){ msg.className='f-msg err'; msg.textContent='CV file is larger than 10 MB.'; return; }
+  btn.disabled = true; btn.textContent = 'Submitting…';
+  try{
+    const path = `applications/${crypto.randomUUID()}-${cv.name.replace(/[^\w.\-]/g,'_')}`;
+    const up = await fetch(`${HRT.SUPABASE_URL}/storage/v1/object/cvs/${path}`,{method:'POST',headers:{...H,'Content-Type':cv.type||'application/octet-stream','x-upsert':'false'},body:cv});
+    if(!up.ok) throw new Error('upload');
+    const ins = await fetch(`${HRT.SUPABASE_URL}/rest/v1/applications`,{method:'POST',headers:{...H,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({
+      job_id: jobId, full_name: f.full_name.value.trim(), email: f.email.value.trim(), phone: f.phone.value.trim(), cover_note: f.cover_note.value.trim()||null, cv_path: path
+    })});
+    if(!ins.ok) throw new Error('insert');
+    f.reset(); msg.className='f-msg ok'; msg.textContent='Application received. We will be in touch if the profile fits.';
+    btn.textContent='Submitted';
+  }catch(e){
+    msg.className='f-msg err'; msg.textContent='Something went wrong — please try again, or email your CV to careers@hrtheories.com.';
+    btn.disabled=false; btn.textContent='Submit application';
+  }
+});
+</script>
+</body>
+</html>
