@@ -11,7 +11,8 @@
 <nav><div class="wrap nav-in">
   <a class="logo" href="/">HR<span>/</span>THEORIES</a>
   <ul class="nav-links">
-    <li><a class="h" href="/#services">Services</a></li>
+    <li><a class="h" href="/executive-search">Executive Search</a></li>
+    <li><a class="h" href="/about">About</a></li>
     <li><a class="h" href="/jobs">Jobs</a></li>
     <li><a class="h" href="/register">Candidates</a></li>
     <li><a class="cta" href="/brief">Brief Us</a></li>
@@ -35,19 +36,31 @@
     <div class="f-row">
       <div><label>Role to fill <span class="req">*</span></label><input name="role_title" required maxlength="160" placeholder="e.g. Chief Financial Officer"></div>
       <div><label>Sector <span class="req">*</span></label>
-        <select name="sector" required>
+        <select name="sector" id="sectorSelect" onchange="toggleOther(this)" required>
           <option value="">Select…</option>
-          <option>Industrial &amp; Manufacturing</option>
           <option>Energy &amp; Utilities</option>
+          <option>Materials (Cement, Chemicals, Metals &amp; Mining)</option>
+          <option>Industrial &amp; Manufacturing</option>
+          <option>Construction &amp; Contracting</option>
+          <option>Transportation &amp; Logistics</option>
+          <option>Banks &amp; Capital Markets</option>
+          <option>Insurance</option>
+          <option>Real Estate &amp; REITs</option>
+          <option>Consumer Goods &amp; Retail</option>
+          <option>Food, Beverages &amp; Agriculture</option>
+          <option>Healthcare &amp; Pharmaceuticals</option>
+          <option>Technology &amp; Software</option>
+          <option>Telecommunications &amp; Media</option>
           <option>Government &amp; Semi-Government</option>
-          <option>Corporate Functions</option>
+          <option>Professional &amp; Commercial Services</option>
           <option>Other</option>
         </select>
+        <input type="text" name="sector_other" id="sectorOther" placeholder="Please specify your sector" maxlength="120" style="display:none;margin-top:10px">
       </div>
     </div>
     <label>The brief <span class="req">*</span></label>
     <textarea name="brief" required maxlength="5000" placeholder="Context, the role, what success looks like, timeline. Everything stays confidential."></textarea>
-    <div class="consent"><input type="checkbox" id="c2" name="assessment_interest"><label for="c2" style="margin:0;text-transform:none;letter-spacing:0;font-weight:400">I'm interested in the assessment option (doubles the replacement guarantee).</label></div>
+    <div class="consent"><input type="checkbox" id="c2" name="assessment_interest"><label for="c2" style="margin:0;text-transform:none;letter-spacing:0;font-weight:400">I'm interested in the assessment option (extends the replacement guarantee, up to 11 months).</label></div>
     <div style="margin-top:26px"><button class="btn red" type="submit" id="briefBtn">Submit confidential brief</button></div>
     <div class="f-msg" id="briefMsg"></div>
   </form>
@@ -57,6 +70,13 @@
 
 <script src="config.js"></script>
 <script>
+
+function toggleOther(sel){
+  var o = document.getElementById('sectorOther');
+  if(sel.value === 'Other'){ o.style.display='block'; o.required=true; }
+  else { o.style.display='none'; o.required=false; o.value=''; }
+}
+
 const H = {apikey:HRT.SUPABASE_ANON_KEY, Authorization:`Bearer ${HRT.SUPABASE_ANON_KEY}`};
 document.getElementById('briefForm').addEventListener('submit', async ev=>{
   ev.preventDefault();
@@ -65,7 +85,7 @@ document.getElementById('briefForm').addEventListener('submit', async ev=>{
   try{
     const r = await fetch(`${HRT.SUPABASE_URL}/rest/v1/client_briefs`,{method:'POST',headers:{...H,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({
       company_name:f.company_name.value.trim(), contact_name:f.contact_name.value.trim(), email:f.email.value.trim(),
-      phone:f.phone.value.trim()||null, role_title:f.role_title.value.trim(), sector:f.sector.value,
+      phone:f.phone.value.trim()||null, role_title:f.role_title.value.trim(), sector:(f.sector.value==='Other'?f.sector_other.value.trim():f.sector.value),
       brief:f.brief.value.trim(), assessment_interest:f.assessment_interest.checked
     })});
     if(!r.ok) throw new Error('insert');

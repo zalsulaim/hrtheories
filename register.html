@@ -11,7 +11,8 @@
 <nav><div class="wrap nav-in">
   <a class="logo" href="/">HR<span>/</span>THEORIES</a>
   <ul class="nav-links">
-    <li><a class="h" href="/#services">Services</a></li>
+    <li><a class="h" href="/executive-search">Executive Search</a></li>
+    <li><a class="h" href="/about">About</a></li>
     <li><a class="h" href="/jobs">Jobs</a></li>
     <li><a class="h active" href="/register">Candidates</a></li>
     <li><a class="cta" href="/brief">Brief Us</a></li>
@@ -38,14 +39,26 @@
     </div>
     <div class="f-row">
       <div><label>Primary sector <span class="req">*</span></label>
-        <select name="sector" required>
+        <select name="sector" id="sectorSelect" onchange="toggleOther(this)" required>
           <option value="">Select…</option>
-          <option>Industrial &amp; Manufacturing</option>
           <option>Energy &amp; Utilities</option>
+          <option>Materials (Cement, Chemicals, Metals &amp; Mining)</option>
+          <option>Industrial &amp; Manufacturing</option>
+          <option>Construction &amp; Contracting</option>
+          <option>Transportation &amp; Logistics</option>
+          <option>Banks &amp; Capital Markets</option>
+          <option>Insurance</option>
+          <option>Real Estate &amp; REITs</option>
+          <option>Consumer Goods &amp; Retail</option>
+          <option>Food, Beverages &amp; Agriculture</option>
+          <option>Healthcare &amp; Pharmaceuticals</option>
+          <option>Technology &amp; Software</option>
+          <option>Telecommunications &amp; Media</option>
           <option>Government &amp; Semi-Government</option>
-          <option>Corporate Functions</option>
+          <option>Professional &amp; Commercial Services</option>
           <option>Other</option>
         </select>
+        <input type="text" name="sector_other" id="sectorOther" placeholder="Please specify your sector" maxlength="120" style="display:none;margin-top:10px">
       </div>
       <div><label>Years of experience <span class="req">*</span></label><input name="years_experience" type="number" min="0" max="60" required></div>
     </div>
@@ -63,6 +76,13 @@
 
 <script src="config.js"></script>
 <script>
+
+function toggleOther(sel){
+  var o = document.getElementById('sectorOther');
+  if(sel.value === 'Other'){ o.style.display='block'; o.required=true; }
+  else { o.style.display='none'; o.required=false; o.value=''; }
+}
+
 const H = {apikey:HRT.SUPABASE_ANON_KEY, Authorization:`Bearer ${HRT.SUPABASE_ANON_KEY}`};
 document.getElementById('regForm').addEventListener('submit', async ev=>{
   ev.preventDefault();
@@ -78,7 +98,7 @@ document.getElementById('regForm').addEventListener('submit', async ev=>{
     const ins = await fetch(`${HRT.SUPABASE_URL}/rest/v1/candidates`,{method:'POST',headers:{...H,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({
       full_name:f.full_name.value.trim(), email:f.email.value.trim(), phone:f.phone.value.trim(),
       linkedin_url:f.linkedin_url.value.trim()||null, current_title:f.current_title.value.trim(),
-      current_company:f.current_company.value.trim()||null, sector:f.sector.value,
+      current_company:f.current_company.value.trim()||null, sector:(f.sector.value==='Other'?f.sector_other.value.trim():f.sector.value),
       years_experience:parseInt(f.years_experience.value,10), notes:f.notes.value.trim()||null, cv_path:path
     })});
     if(!ins.ok) throw new Error('insert');
