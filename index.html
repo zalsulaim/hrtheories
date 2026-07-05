@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/logo.svg">
 <title>HR Theories — Executive Search, Guaranteed Longer | Riyadh, Saudi Arabia</title>
 <meta name="description" content="Boutique executive search in Saudi Arabia. Assessment-backed placements, replacement guarantees extendable to 11 months, and reach to 200M+ professional profiles worldwide.">
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=Archivo+Expanded:wght@500;700&display=swap" rel="stylesheet">
@@ -9,12 +10,13 @@
 </head>
 <body>
 <nav><div class="wrap nav-in">
-  <a class="logo" href="/">HR<span>/</span>THEORIES</a>
+  <a class="logo" href="/"><img class="logo-mark" src="/logo.svg" alt=""><span class="wm">HR THEORIES</span></a>
   <ul class="nav-links">
     <li><a class="h" href="/executive-search">Executive Search</a></li>
     <li><a class="h" href="/about">About</a></li>
     <li><a class="h" href="/jobs">Jobs</a></li>
     <li><a class="h" href="/register">Candidates</a></li>
+    <li><a class="h" href="/contact">Contact</a></li>
     <li><a class="cta" href="/brief">Brief Us</a></li>
   </ul>
 </div></nav>
@@ -81,7 +83,31 @@
   </div>
 </div></div>
 
-<footer class="wrap"><div>© 2026 HR Theories — Riyadh, Saudi Arabia</div><div><a href="/jobs" style="text-decoration:none">Open roles</a> · hrtheories.com</div></footer>
+<footer class="wrap">
+  <div class="foot-contact">
+    <div>
+      <div class="fc-brand"><img src="/logo.svg" alt="" style="width:22px;height:22px;vertical-align:-4px;margin-right:8px">HR THEORIES</div>
+      <div class="fc-tag">Boutique executive search for Saudi Arabia and the GCC — measured, discreet, and guaranteed.</div>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="/executive-search">Executive Search</a>
+      <a href="/about">About &amp; Mission</a>
+      <a href="/jobs">Open Roles</a>
+      <a href="/contact">Contact</a>
+    </div>
+    <div>
+      <h4>Get in touch</h4>
+      <a href="mailto:ziad@hrtheories.com">ziad@hrtheories.com</a>
+      <a href="tel:+966505136587">+966 50 513 6587</a>
+      <a class="wa" href="https://wa.me/966505136587" target="_blank" rel="noopener">WhatsApp us &rarr;</a>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px">
+    <div>© 2026 HR Theories — Riyadh, Saudi Arabia</div>
+    <div>hrtheories.com</div>
+  </div>
+</footer>
 <script src="config.js"></script>
 <script>
 (async function(){
@@ -95,6 +121,7 @@
     if(!rows.length) throw 0;
     tb.innerHTML = rows.map(s=>`<tr><td class="name">${esc(s.title)}</td><td class="desc">${esc(s.scope||'')}</td><td class="type">${s.engagement==='Core'?('<b>'+esc(s.engagement)+'</b>'):esc(s.engagement||'')}</td></tr>`).join('');
   }catch(e){
+    // graceful fallback: static list if the database is unreachable
     tb.innerHTML = `
       <tr><td class="name">Executive Search</td><td class="desc">Retained, confidential search for C-suite, board and business-critical roles.</td><td class="type"><b>Core</b></td></tr>
       <tr><td class="name">Projects &amp; Expansion</td><td class="desc">Leadership and key-role hiring for new plants, market entries and major projects.</td><td class="type">Tailored</td></tr>

@@ -7,8 +7,9 @@ h1,h2,.xh{font-family:"Archivo Expanded",sans-serif;font-weight:700;text-transfo
 /* nav */
 nav{border-bottom:2px solid var(--line);background:var(--paper);position:sticky;top:0;z-index:50}
 .nav-in{display:flex;justify-content:space-between;align-items:stretch;height:64px}
-.logo{display:flex;align-items:center;font-weight:800;font-size:18px;text-decoration:none;color:var(--ink);text-transform:uppercase}
-.logo span{color:var(--ver)}
+.logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:18px;text-decoration:none;color:var(--ink);text-transform:uppercase}
+.logo-mark{width:26px;height:26px;display:block}
+.logo .wm{color:var(--ink);letter-spacing:.01em}
 .nav-links{display:flex;list-style:none;align-items:stretch}
 .nav-links a{display:flex;align-items:center;padding:0 22px;border-left:1px solid var(--line);text-decoration:none;color:var(--ink);font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.06em}
 .nav-links a:hover{background:var(--ink);color:#fff}
@@ -114,3 +115,13 @@ article.body{max-width:74ch;color:#2A2E2A;white-space:pre-line;font-size:16.5px;
 footer{padding:30px 0 46px;display:flex;justify-content:space-between;font-size:13px;color:var(--grey);text-transform:uppercase;letter-spacing:.08em;flex-wrap:wrap;gap:10px}
 .skel{height:80px;background:linear-gradient(90deg,#F1F1EE,#E7E7E3,#F1F1EE);background-size:200% 100%;animation:sk 1.2s infinite;margin-bottom:12px}
 @keyframes sk{from{background-position:200% 0}to{background-position:-200% 0}}
+/* footer contact block */
+.foot-contact{border-top:2px solid var(--line);margin-top:20px;display:grid;grid-template-columns:2fr 1fr 1fr;gap:24px;padding:40px 0 20px}
+@media(max-width:760px){.foot-contact{grid-template-columns:1fr;gap:22px}}
+.foot-contact .fc-brand{font-family:"Archivo Expanded";font-weight:700;text-transform:uppercase;font-size:20px}
+.foot-contact .fc-brand span{color:var(--ver)}
+.foot-contact .fc-tag{color:var(--grey);font-size:14px;margin-top:8px;max-width:38ch;text-transform:none;letter-spacing:0}
+.foot-contact h4{font-size:11px;text-transform:uppercase;letter-spacing:.12em;color:var(--grey);margin-bottom:12px;font-weight:600}
+.foot-contact a{display:block;color:var(--ink);text-decoration:none;font-size:15px;margin-bottom:8px;text-transform:none;letter-spacing:0;font-weight:500}
+.foot-contact a:hover{color:var(--ver)}
+.foot-contact .wa{display:inline-flex;align-items:center;gap:7px}
