@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/logo.svg">
+<title>كلّفنا — HR Theories</title>
+<meta name="description" content="قدّم تكليف بحثٍ تنفيذيٍّ سرّي. تردّ HR Theories خلال يوم عمل واحد.">
+<link rel="alternate" hreflang="en" href="https://hrtheories.com/brief">
+<link rel="alternate" hreflang="ar" href="https://hrtheories.com/ar/brief">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=Archivo+Expanded:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/swiss.css">
+<link rel="stylesheet" href="/swiss-ar.css">
+</head>
+<body><nav><div class="wrap nav-in">
+  <a class="logo" href="/ar/"><img class="logo-mark" src="/logo.svg" alt=""><span class="wm">HR THEORIES</span></a>
+  <ul class="nav-links">
+    <li><a class="h" href="/ar/executive-search">البحث التنفيذي</a></li>
+    <li><a class="h" href="/ar/about">من نحن</a></li>
+    <li><a class="h" href="/ar/jobs">الوظائف</a></li>
+    <li><a class="h" href="/ar/register">المرشّحون</a></li>
+    <li><a class="h" href="/ar/contact">تواصل</a></li>
+    <li><a id="langSwitch" class="h" href="/brief">English</a></li>
+    <li><a class="cta" href="/ar/brief">كلّفنا</a></li>
+  </ul>
+</div></nav>
+
+<section class="blk"><div class="wrap">
+  <span class="tag">العملاء — سرّي</span>
+  <h2 class="sec" style="margin-top:26px">كلّفنا <em>بتعيين.</em></h2>
+  <p class="sec-sub">أخبرنا عن المنصب الذي تحتاج شغله. نردّ خلال يوم عمل واحد برؤيةٍ صادقةٍ للبحث — بما في ذلك ما إذا كنّا الجهة المناسبة له. ويحصل العملاء لأول مرة على خصم 50% من رسوم التوظيف في تكليفهم الأول.</p>
+
+  <form class="std" id="briefForm">
+    <div class="f-row">
+      <div><label>الشركة <span class="req">*</span></label><input name="company_name" required maxlength="160"></div>
+      <div><label>اسمك <span class="req">*</span></label><input name="contact_name" required maxlength="120"></div>
+    </div>
+    <div class="f-row">
+      <div><label>البريد الإلكتروني للعمل <span class="req">*</span></label><input name="email" type="email" required maxlength="160" dir="ltr"></div>
+      <div><label>الهاتف</label><input name="phone" maxlength="40" dir="ltr" placeholder="+966 …"></div>
+    </div>
+    <div class="f-row">
+      <div><label>المنصب المطلوب <span class="req">*</span></label><input name="role_title" required maxlength="160" placeholder="مثال: المدير المالي التنفيذي"></div>
+      <div><label>القطاع <span class="req">*</span></label>
+        <select name="sector" id="sectorSelect" onchange="toggleOther(this)" required>
+          <option value="">اختر…</option>
+          <option>الطاقة والمرافق</option>
+          <option>المواد الأساسية (الإسمنت، الكيماويات، المعادن والتعدين)</option>
+          <option>الصناعة والتصنيع</option>
+          <option>التشييد والمقاولات</option>
+          <option>النقل واللوجستيات</option>
+          <option>البنوك وأسواق المال</option>
+          <option>التأمين</option>
+          <option>العقارات وصناديق الاستثمار العقاري</option>
+          <option>السلع الاستهلاكية والتجزئة</option>
+          <option>إنتاج الأغذية والمشروبات والزراعة</option>
+          <option>الرعاية الصحية والأدوية</option>
+          <option>التقنية والبرمجيات</option>
+          <option>الاتصالات والإعلام</option>
+          <option>القطاع الحكومي وشبه الحكومي</option>
+          <option>الخدمات المهنية والتجارية</option>
+          <option value="أخرى">أخرى</option>
+        </select>
+        <input type="text" name="sector_other" id="sectorOther" placeholder="يرجى تحديد القطاع" maxlength="120" style="display:none;margin-top:10px">
+      </div>
+    </div>
+    <label>التكليف <span class="req">*</span></label>
+    <textarea name="brief" required maxlength="5000" placeholder="السياق، والدور، وما يعنيه النجاح، والإطار الزمني. تبقى كل التفاصيل سرّية."></textarea>
+    <div class="consent"><input type="checkbox" id="c2" name="assessment_interest"><label for="c2" style="margin:0;font-weight:400">تهمّني إضافة خيار التقييم (يمدّد ضمان الاستبدال حتى 11 شهراً).</label></div>
+    <div style="margin-top:26px"><button class="btn red" type="submit" id="briefBtn">أرسل التكليف السرّي</button></div>
+    <div class="f-msg" id="briefMsg"></div>
+  </form>
+</div></section>
+
+<footer class="wrap">
+  <div class="foot-contact">
+    <div>
+      <div class="fc-brand"><img src="/logo.svg" alt="" style="width:22px;height:22px;vertical-align:-4px;margin-left:8px">HR THEORIES</div>
+      <div class="fc-tag">توظيف تنفيذي متخصّص للمملكة العربية السعودية ودول مجلس التعاون — بحثٌ مدروس، وسرّي، ومضمون.</div>
+    </div>
+    <div>
+      <h4>استكشف</h4>
+      <a href="/ar/executive-search">البحث التنفيذي</a>
+      <a href="/ar/about">من نحن ورسالتنا</a>
+      <a href="/ar/jobs">الوظائف المتاحة</a>
+      <a href="/ar/contact">تواصل</a>
+    </div>
+    <div>
+      <h4>تواصل معنا</h4>
+      <a href="mailto:ziad@hrtheories.com">ziad@hrtheories.com</a>
+      <a href="tel:+966505136587" dir="ltr">+966 50 513 6587</a>
+      <a class="wa" href="https://wa.me/966505136587" target="_blank" rel="noopener">راسلنا على واتساب &larr;</a>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px">
+    <div>&copy; 2026 HR Theories — الرياض، المملكة العربية السعودية</div>
+    <div dir="ltr">hrtheories.com</div>
+  </div>
+</footer>
+<script src="/config.js"></script>
+<script>
+function toggleOther(sel){
+  var o = document.getElementById('sectorOther');
+  if(sel.value === 'أخرى'){ o.style.display='block'; o.required=true; }
+  else { o.style.display='none'; o.required=false; o.value=''; }
+}
+
+const H = {apikey:HRT.SUPABASE_ANON_KEY, Authorization:`Bearer ${HRT.SUPABASE_ANON_KEY}`};
+document.getElementById('briefForm').addEventListener('submit', async ev=>{
+  ev.preventDefault();
+  const f = ev.target, btn = document.getElementById('briefBtn'), msg = document.getElementById('briefMsg');
+  msg.className='f-msg'; btn.disabled = true; btn.textContent = 'جارٍ الإرسال…';
+  try{
+    const r = await fetch(`${HRT.SUPABASE_URL}/rest/v1/client_briefs`,{method:'POST',headers:{...H,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({
+      company_name:f.company_name.value.trim(), contact_name:f.contact_name.value.trim(), email:f.email.value.trim(),
+      phone:f.phone.value.trim()||null, role_title:f.role_title.value.trim(), sector:(f.sector.value==='أخرى'?f.sector_other.value.trim():f.sector.value),
+      brief:f.brief.value.trim(), assessment_interest:f.assessment_interest.checked
+    })});
+    if(!r.ok) throw new Error('insert');
+    f.reset(); msg.className='f-msg ok'; msg.textContent='تسلّمنا التكليف بسريّة. توقّع ردّنا خلال يوم عمل واحد.';
+    btn.textContent='تمّ الإرسال';
+  }catch(e){
+    msg.className='f-msg err'; msg.textContent='تعذّر الإرسال — يرجى المحاولة مجدداً، أو مراسلتنا مباشرةً على clients@hrtheories.com.';
+    btn.disabled=false; btn.textContent='أرسل التكليف السرّي';
+  }
+});
+</script>
+</body>
+</html>
