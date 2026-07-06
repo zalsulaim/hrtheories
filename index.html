@@ -122,7 +122,6 @@
     if(!rows.length) throw 0;
     tb.innerHTML = rows.map(s=>`<tr><td class="name">${esc(s.title)}</td><td class="desc">${esc(s.scope||'')}</td><td class="type">${s.engagement==='Core'?('<b>'+esc(s.engagement)+'</b>'):esc(s.engagement||'')}</td></tr>`).join('');
   }catch(e){
-    // graceful fallback: static list if the database is unreachable
     tb.innerHTML = `
       <tr><td class="name">Executive Search</td><td class="desc">Retained, confidential search for C-suite, board and business-critical roles.</td><td class="type"><b>Core</b></td></tr>
       <tr><td class="name">Projects &amp; Expansion</td><td class="desc">Leadership and key-role hiring for new plants, market entries and major projects.</td><td class="type">Tailored</td></tr>
