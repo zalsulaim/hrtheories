@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/svg+xml" href="/logo.svg">
+<title>وظيفة — HR Theories</title>
+<meta name="description" content="تفاصيل الوظيفة والتقديم — HR Theories.">
+<link rel="alternate" hreflang="en" href="https://hrtheories.com/job">
+<link rel="alternate" hreflang="ar" href="https://hrtheories.com/ar/job">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=Archivo+Expanded:wght@500;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/swiss.css">
+<link rel="stylesheet" href="/swiss-ar.css">
+</head>
+<body><nav><div class="wrap nav-in">
+  <a class="logo" href="/ar/"><img class="logo-mark" src="/logo.svg" alt=""><span class="wm">HR THEORIES</span></a>
+  <ul class="nav-links">
+    <li><a class="h" href="/ar/executive-search">البحث التنفيذي</a></li>
+    <li><a class="h" href="/ar/about">من نحن</a></li>
+    <li><a class="h active" href="/ar/jobs">الوظائف</a></li>
+    <li><a class="h" href="/ar/register">المرشّحون</a></li>
+    <li><a class="h" href="/ar/contact">تواصل</a></li>
+    <li><a id="langSwitch" class="h" href="/job">English</a></li>
+    <li><a class="cta" href="/ar/brief">كلّفنا</a></li>
+  </ul>
+</div></nav>
+
+<section class="blk"><div class="wrap" id="job">
+  <div class="skel"></div><div class="skel"></div>
+</div></section>
+
+<section class="blk" id="applyBlock" style="display:none"><div class="wrap">
+  <h2 class="sec">تقديم <em>الطلب.</em></h2>
+  <form class="std" id="applyForm">
+    <div class="f-row">
+      <div><label>الاسم الكامل <span class="req">*</span></label><input name="full_name" required maxlength="120"></div>
+      <div><label>البريد الإلكتروني <span class="req">*</span></label><input name="email" type="email" required maxlength="160" dir="ltr"></div>
+    </div>
+    <div class="f-row">
+      <div><label>الهاتف <span class="req">*</span></label><input name="phone" required maxlength="40" dir="ltr" placeholder="+966 5X XXX XXXX"></div>
+      <div><label>السيرة الذاتية (PDF أو Word) <span class="req">*</span></label><input name="cv" type="file" accept=".pdf,.doc,.docx" required><div class="f-note">بحدّ أقصى 10 ميغابايت.</div></div>
+    </div>
+    <label>خطاب تعريفي</label>
+    <textarea name="cover_note" maxlength="3000" placeholder="اختياري — لماذا يناسبك هذا الدور."></textarea>
+    <div class="consent"><input type="checkbox" required id="c1"><label for="c1" style="margin:0;font-weight:400">أوافق على احتفاظ HR Theories ببياناتي وسيرتي الذاتية لأغراض التوظيف.</label></div>
+    <div style="margin-top:26px"><button class="btn red" type="submit" id="applyBtn">أرسل الطلب</button></div>
+    <div class="f-msg" id="applyMsg"></div>
+  </form>
+</div></section>
+
+<footer class="wrap">
+  <div class="foot-contact">
+    <div>
+      <div class="fc-brand"><img src="/logo.svg" alt="" style="width:22px;height:22px;vertical-align:-4px;margin-left:8px">HR THEORIES</div>
+      <div class="fc-tag">توظيف تنفيذي متخصّص للمملكة العربية السعودية ودول مجلس التعاون — بحث، مدروس، وسرّي، ومضمون.</div>
+    </div>
+    <div>
+      <h4>استكشف</h4>
+      <a href="/ar/executive-search">البحث التنفيذي</a>
+      <a href="/ar/about">من نحن ورسالتنا</a>
+      <a href="/ar/jobs">الوظائف المتاحة</a>
+      <a href="/ar/contact">تواصل</a>
+    </div>
+    <div>
+      <h4>تواصل معنا</h4>
+      <a href="mailto:ziad@hrtheories.com">ziad@hrtheories.com</a>
+      <a href="tel:+966505136587" dir="ltr">+966 50 513 6587</a>
+      <a class="wa" href="https://wa.me/966505136587" target="_blank" rel="noopener">راسلنا على واتساب &larr;</a>
+    </div>
+  </div>
+  <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;padding-top:8px">
+    <div>&copy; 2026 HR Theories — الرياض، المملكة العربية السعودية</div>
+    <div dir="ltr">hrtheories.com</div>
+  </div>
+</footer>
+<script src="/config.js"></script>
+<script>
+const H = {apikey:HRT.SUPABASE_ANON_KEY, Authorization:`Bearer ${HRT.SUPABASE_ANON_KEY}`};
+const params = new URLSearchParams(location.search);
+const jobId = params.get('id');
+const esc = s=>{const d=document.createElement('div');d.textContent=s??'';return d.innerHTML;};
+
+(async function(){
+  const el = document.getElementById('job');
+  if(!jobId){ el.innerHTML = '<div class="empty"><b>الوظيفة غير موجودة.</b><a href="/ar/jobs">العودة إلى الوظائف المتاحة</a></div>'; return; }
+  try{
+    const r = await fetch(`${HRT.SUPABASE_URL}/rest/v1/jobs?id=eq.${encodeURIComponent(jobId)}&status=eq.open&select=*`,{headers:H});
+    const rows = await r.json();
+    if(!rows.length) throw 0;
+    const j = rows[0];
+    document.title = `${j.title} — HR Theories`;
+    el.innerHTML = `
+      <a href="/ar/jobs" style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;text-decoration:none">&rarr; كل الوظائف</a>
+      <h2 class="sec" style="margin-top:22px">${esc(j.title)}</h2>
+      <div class="meta-strip">
+        <div><b>القطاع</b>${esc(j.sector||'—')}</div>
+        <div><b>الموقع</b>${esc(j.location||'—')}</div>
+        <div><b>نوع التوظيف</b>${esc(j.employment_type||'—')}</div>
+        <div><b>المستوى</b>${esc(j.seniority||'—')}</div>
+      </div>
+      <article class="body">${esc(j.description||'')}</article>
+      ${j.requirements?`<h3 style="margin:34px 0 12px;font-family:'IBM Plex Sans Arabic';text-transform:uppercase;font-size:16px">المتطلبات</h3><article class="body">${esc(j.requirements)}</article>`:''}`;
+    document.getElementById('applyBlock').style.display='block';
+  }catch(e){
+    el.innerHTML = '<div class="empty"><b>هذه الوظيفة لم تعد متاحة.</b><a href="/ar/jobs">العودة إلى الوظائف المتاحة</a></div>';
+  }
+})();
+
+document.getElementById('applyForm').addEventListener('submit', async ev=>{
+  ev.preventDefault();
+  const f = ev.target, btn = document.getElementById('applyBtn'), msg = document.getElementById('applyMsg');
+  msg.className='f-msg';
+  const cv = f.cv.files[0];
+  if(cv && cv.size > 10*1024*1024){ msg.className='f-msg err'; msg.textContent='حجم ملف السيرة الذاتية أكبر من 10 ميغابايت.'; return; }
+  btn.disabled = true; btn.textContent = 'جارٍ الإرسال…';
+  try{
+    const path = `applications/${crypto.randomUUID()}-${cv.name.replace(/[^\w.\-]/g,'_')}`;
+    const up = await fetch(`${HRT.SUPABASE_URL}/storage/v1/object/cvs/${path}`,{method:'POST',headers:{...H,'Content-Type':cv.type||'application/octet-stream','x-upsert':'false'},body:cv});
+    if(!up.ok) throw new Error('upload');
+    const ins = await fetch(`${HRT.SUPABASE_URL}/rest/v1/applications`,{method:'POST',headers:{...H,'Content-Type':'application/json',Prefer:'return=minimal'},body:JSON.stringify({
+      job_id: jobId, full_name: f.full_name.value.trim(), email: f.email.value.trim(), phone: f.phone.value.trim(), cover_note: f.cover_note.value.trim()||null, cv_path: path
+    })});
+    if(!ins.ok) throw new Error('insert');
+    f.reset(); msg.className='f-msg ok'; msg.textContent='تسلّمنا طلبك. سنتواصل معك إن كان الملف مناسباً.';
+    btn.textContent='تمّ الإرسال';
+  }catch(e){
+    msg.className='f-msg err'; msg.textContent='تعذّر الإرسال — يرجى المحاولة مجدداً، أو إرسال سيرتك إلى careers@hrtheories.com.';
+    btn.disabled=false; btn.textContent='أرسل الطلب';
+  }
+});
+</script>
+</body>
+</html>
